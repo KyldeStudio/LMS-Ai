@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Custom button styles using @apply */
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition;
+}
+
+.btn-primary {
+  @apply bg-[#297048] text-white py-2 px-6 rounded-md hover:bg-green-700 shadow-md;
+}
+
+.btn-outline {
+  @apply border border-[#297048] text-[#297048] py-2 px-6 rounded-md hover:bg-green-100 shadow-md;
+}
