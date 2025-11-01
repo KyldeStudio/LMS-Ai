@@ -7,7 +7,7 @@ $isAddMode = isset($_GET['add']);
 
 
 // Fetch all users
-$query = "SELECT id, CONCAT(fullname) AS fullname FROM users ORDER BY fullname ASC";
+$query = "SELECT id, CONCAT(fullname) AS fullname FROM instructors ORDER BY fullname ASC";
 $result = mysqli_query($conn, $query);
 
 $isEditMode = isset($_GET['edit']) && isset($_GET['id']);
@@ -15,19 +15,19 @@ $isEditMode = isset($_GET['edit']) && isset($_GET['id']);
 $search = "";
 if (isset($_GET['search'])) {
     $search = mysqli_real_escape_string($conn, $_GET['search']);
-    $query = "SELECT id, fullname FROM users WHERE fullname LIKE '%$search%' ORDER BY fullname ASC";
+    $query = "SELECT id, fullname FROM instructors WHERE fullname LIKE '%$search%' ORDER BY fullname ASC";
 } else {
-    $query = "SELECT id, fullname FROM users ORDER BY fullname ASC";
+    $query = "SELECT id, fullname FROM instructors ORDER BY fullname ASC";
 }
 $result = mysqli_query($conn, $query);
 
 // If a user is clicked
-$selectedUser = null;
+$selectedInstructors = null;
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $infoQuery = "SELECT * FROM users WHERE id = $id";
+    $infoQuery = "SELECT * FROM instructors WHERE id = $id";
     $infoResult = mysqli_query($conn, $infoQuery);
-    $selectedUser = mysqli_fetch_assoc($infoResult);
+    $selectedInstructors = mysqli_fetch_assoc($infoResult);
 }
 ?>
 
@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
+    <title>User Management - User</title>
     <link rel="stylesheet" href="../dist/style.css">
     <link rel="stylesheet" href="../public/gen.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -83,14 +83,14 @@ if (isset($_GET['id'])) {
     <main class="relative h-screen w-auto flex flex-col ml-[400px] items-start justify-start  p-8 space-y-4">
 
         <div class="flex flex-col space-y-4">
-            <h2 class="font-bold text-xl">User Management</h2>
+            <h2 class="font-bold text-xl">Instructors Management</h2>
             <?php if (isset($_GET['msg']) && $_GET['msg'] === 'deleted'): ?>
                 <div class="bg-red-500 text-white p-2 rounded-md">
-                    User deleted successfully.
+                    Instructors deleted successfully.
                 </div>
             <?php endif; ?>
 
-            <div class="rounded-md border border-gray-300 overflow-hidden">
+            <div class="rounded-md border border-gray-300 overflow-hidden w-fit">
                 <Button class="bg-transparent py-2 px-6"><a href="manage_user.php">User</a></Button>
                 <Button class="py-2 px-6 text-black bg-white"><a href="manage_instructors.php">Instructors</a></Button>
             </div>
@@ -101,13 +101,13 @@ if (isset($_GET['id'])) {
             <!-- Sidebar user list -->
             <div class=" min-w-[400px] max-w-[400px] bg-[#181818] border rounded-l-md border-gray-400 p-4 space-y-4">
                 <div class="flex justify-between items-center space-x-4">
-                    <form method="GET" action="manage_user.php" class="flex justify-between items-center w-full">
+                    <form method="GET" action="manage_instructors.php" class="flex justify-between items-center w-full">
                         <input 
                             type="text" 
                             name="search" 
                             value="<?= htmlspecialchars($search) ?>" 
                             class="border py-2 px-4 rounded-l-md w-full bg-transparent" 
-                            placeholder="Search user..."
+                            placeholder="Search instructors..."
                         >
                         <button type="submit" class="bg-white p-3 rounded-r-md border hover:bg-[#9c9c9c] transition-all duration-300 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 612.01 612.01" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M606.209 578.714 448.198 423.228C489.576 378.272 515 318.817 515 253.393 514.98 113.439 399.704 0 257.493 0S.006 113.439.006 253.393s115.276 253.393 257.487 253.393c61.445 0 117.801-21.253 162.068-56.586l158.624 156.099c7.729 7.614 20.277 7.614 28.006 0a19.291 19.291 0 0 0 .018-27.585zM257.493 467.8c-120.326 0-217.869-95.993-217.869-214.407S137.167 38.986 257.493 38.986c120.327 0 217.869 95.993 217.869 214.407S377.82 467.8 257.493 467.8z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></svg>
@@ -139,22 +139,22 @@ if (isset($_GET['id'])) {
             <div class="fixed left-[832px] bg-[#181818] border rounded-r-md border-gray-400 h-auto py-4 px-8 space-y-4 w-[400px]">
                 <div class="flex flex-row items-center justify-between">
                     <h3 class="text-xl font-bold">
-                        <?= $isAddMode ? 'Add New User' : ($isEditMode ? 'Edit User' : 'User Information') ?>
+                        <?= $isAddMode ? 'Add New Instructors' : ($isEditMode ? 'Edit Instructors' : 'Instructors Information') ?>
                     </h3>
                     <div class="flex flex-row space-x-4 items-center justify-center">
                         <?php if ($isAddMode || $isEditMode): ?>
-                            <a href="manage_user.php" class="cursor-pointer">
+                            <a href="manage_instructors.php" class="cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><ellipse cx="256" cy="256" rx="256" ry="255.832" fill="#e21b1b" data-original="#e21b1b"></ellipse><path d="M228.021 113.143h55.991v285.669h-55.991z" transform="rotate(-45.001 256.015 255.982)" fill="#ffffff" data-original="#ffffff"></path><path d="M113.164 227.968h285.669v55.991H113.164z" s transform="rotate(-45.001 255.997 255.968)" fill="#ffffff" data-original="#ffffff"></path></g></svg>
                             </a>
-                        <?php elseif ($selectedUser): ?>
+                        <?php elseif ($selectedInstructors): ?>
                             <!-- edit button -->
-                            <a href="?edit=true&id=<?= $selectedUser['id'] ?>" class="cursor-pointer">
+                            <a href="?edit=true&id=<?= $selectedInstructors['id'] ?>" class="cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g data-name="Layer 2"><circle cx="256" cy="256" r="256" fill="#26a1f4" opacity="1" data-original="#26a1f4"></circle><g fill="#fff"><path d="m345.15 237.54-.14-.14-70.56-70.61s-86 86-127.44 128.3c-5.16 5.26-9.07 12.58-11.39 19.66-6.8 20.79-12.43 42-18.69 63-1.68 5.63-1.34 10.59 3.07 14.79 4.16 4 8.84 4.14 14.24 2.52 20-6 40.13-11.71 60.22-17.46a61.5 61.5 0 0 0 27.16-16.39c39.48-39.72 123.53-123.67 123.53-123.67zM386.34 149.81l-24.13-24.13a33 33 0 0 0-46.65 0L288.21 153 359 223.81l27.35-27.35a33 33 0 0 0-.01-46.65z" fill="#ffffff" opacity="1" data-original="#ffffff"></path></g></g></g></svg>
                             </a>
                             <!-- delete button -->
                             <button 
                                 class="cursor-pointer"
-                                onclick="if(confirm('Are you sure you want to delete this user?')) window.location.href='delete_user.php?id=<?= $selectedUser['id'] ?>';">
+                                onclick="if(confirm('Are you sure you want to delete this user?')) window.location.href='instructors_delete.php?id=<?= $selectedInstructors['id'] ?>';">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" x="0" y="0" viewBox="0 0 173.397 173.397" style="enable-background:new 0 0 512 512" xml:space="preserve" fill-rule="evenodd" class=""><g><circle cx="86.699" cy="86.699" r="84.667" fill="#db4437" opacity="1" data-original="#db4437" class=""></circle><g fill="#fff"><path d="m122.819 67.955-6.586 66.354c-.376 3.783-3.256 6.818-7.059 6.818H64.223c-3.802 0-6.683-3.033-7.058-6.818l-6.587-66.354zM71.052 81.06a3.538 3.538 0 0 1 3.334-3.718 3.538 3.538 0 0 1 3.719 3.333l2.275 41.735a3.476 3.476 0 0 1-2.12 3.432c-1.381.599-2.912.291-3.954-.796a3.515 3.515 0 0 1-.978-2.247l-2.276-41.74zm27.96-3.718a3.549 3.549 0 0 1 3.333 3.718l-2.275 41.734a3.476 3.476 0 0 1-2.479 3.18 3.476 3.476 0 0 1-3.844-1.216 3.516 3.516 0 0 1-.73-2.344l2.276-41.739a3.538 3.538 0 0 1 3.718-3.333z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path><rect width="86.35" height="12.415" x="43.524" y="53.122" rx="6.207" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></rect><path d="M108.151 53.726h-6.18v-7.94c0-4.035-3.3-7.336-7.335-7.336H78.762c-4.035 0-7.336 3.3-7.336 7.336v7.94h-6.18v-7.94c0-7.446 6.07-13.516 13.515-13.516h15.875c7.445 0 13.515 6.07 13.515 13.515z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path></g></g></svg>
                             </button>
 
@@ -164,7 +164,7 @@ if (isset($_GET['id'])) {
 
                 <?php if ($isAddMode): ?>
                     <!-- ADD USER FORM -->
-                    <form action="user_add_process.php" method="POST" class="space-y-4">
+                    <form action="instructors_add_process.php" method="POST" class="space-y-4">
                         <div>
                             <label class="block text-sm font-semibold mb-1">Full Name</label>
                             <input type="text" name="fullname" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
@@ -174,8 +174,8 @@ if (isset($_GET['id'])) {
                             <input type="email" name="email" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-1">Age</label>
-                            <input type="number" name="age" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
+                            <label class="block text-sm font-semibold mb-1">Office Hours</label>
+                            <input type="text" name="office_hours" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1">Username</label>
@@ -186,29 +186,29 @@ if (isset($_GET['id'])) {
                             <input type="password" name="password" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <button type="submit" class="bg-blue-600 w-full hover:bg-blue-700 px-4 py-2 rounded-md font-semibold cursor-pointer">
-                            Add User
+                            Add Instructors
                         </button>
                     </form>
 
-                <?php elseif ($isEditMode && $selectedUser): ?>
+                <?php elseif ($isEditMode && $selectedInstructors): ?>
                     <!-- EDIT USER FORM -->
-                    <form action="user_edit_process.php" method="POST" class="space-y-4">
-                        <input type="hidden" name="id" value="<?= $selectedUser['id'] ?>">
+                    <form action="instructors_edit_process.php" method="POST" class="space-y-4">
+                        <input type="hidden" name="id" value="<?= $selectedInstructors['id'] ?>">
                         <div>
                             <label class="block text-sm font-semibold mb-1">Full Name</label>
-                            <input type="text" name="fullname" value="<?= htmlspecialchars($selectedUser['fullname']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
+                            <input type="text" name="fullname" value="<?= htmlspecialchars($selectedInstructors['fullname']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1">Email</label>
-                            <input type="email" name="email" value="<?= htmlspecialchars($selectedUser['email']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
+                            <input type="email" name="email" value="<?= htmlspecialchars($selectedInstructors['email']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-1">Age</label>
-                            <input type="number" name="age" value="<?= htmlspecialchars($selectedUser['age']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
+                            <label class="block text-sm font-semibold mb-1">Office Hours</label>
+                            <input type="text" name="office_hours" value="<?= htmlspecialchars($selectedInstructors['office_hours']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1">Username</label>
-                            <input type="text" name="username" value="<?= htmlspecialchars($selectedUser['username']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
+                            <input type="text" name="username" value="<?= htmlspecialchars($selectedInstructors['username']) ?>" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1">New Password (optional)</label>
@@ -219,15 +219,15 @@ if (isset($_GET['id'])) {
                         </button>
                     </form>
 
-                <?php elseif ($selectedUser): ?>
+                <?php elseif ($selectedInstructors): ?>
                     <!-- USER INFO -->
                     <div class="space-y-4">
-                        <p><span class="font-semibold">ID:</span> <?= htmlspecialchars($selectedUser['id']) ?></p>
-                        <p><span class="font-semibold">Full Name:</span> <?= htmlspecialchars($selectedUser['fullname']) ?></p>
-                        <p><span class="font-semibold">Email:</span> <?= htmlspecialchars($selectedUser['email']) ?></p>
-                        <p><span class="font-semibold">Age:</span> <?= htmlspecialchars($selectedUser['age']) ?></p>
-                        <p><span class="font-semibold">Username:</span> <?= htmlspecialchars($selectedUser['username']) ?></p>
-                        <p><span class="font-semibold">Created at:</span> <?= htmlspecialchars($selectedUser['created_at']) ?></p>
+                        <p><span class="font-semibold">ID:</span> <?= htmlspecialchars($selectedInstructors['id']) ?></p>
+                        <p><span class="font-semibold">Full Name:</span> <?= htmlspecialchars($selectedInstructors['fullname']) ?></p>
+                        <p><span class="font-semibold">Email:</span> <?= htmlspecialchars($selectedInstructors['email']) ?></p>
+                        <p><span class="font-semibold">Office Hours:</span> <?= htmlspecialchars($selectedInstructors['office_hours']) ?></p>
+                        <p><span class="font-semibold">Username:</span> <?= htmlspecialchars($selectedInstructors['username']) ?></p>
+                        <p><span class="font-semibold">Created at:</span> <?= htmlspecialchars($selectedInstructors['created_at']) ?></p>
                     </div>
                 <?php else: ?>
                     <p class="text-gray-400">Select a user to view information.</p>
@@ -241,7 +241,7 @@ if (isset($_GET['id'])) {
     <script>
     function confirmDelete(id) {
         if (confirm("Are you sure you want to delete this user?")) {
-            window.location.href = "delete_user.php?id=" + id;
+            window.location.href = "instructors_delete.php?id=" + id;
         }
     }
     </script>

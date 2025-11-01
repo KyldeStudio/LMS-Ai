@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
+    <title>User Management - User</title>
     <link rel="stylesheet" href="../dist/style.css">
     <link rel="stylesheet" href="../public/gen.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
