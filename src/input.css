@@ -2,7 +2,7 @@
 
 /* Custom button styles using @apply */
 .btn {
-  @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition;
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition ;
 }
 
 .btn-primary {
