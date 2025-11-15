@@ -1,5 +1,5 @@
 <?php
-include '../include/db_connect.php';
+include '../../include/db_connect.php';
 
 $id = $_POST['id'];
 $fullname = $_POST['fullname'];
@@ -16,7 +16,7 @@ if (!empty($password)) {
 }
 
 if (mysqli_query($conn, $query)) {
-    header("Location: manage_instructors.php?id=$id");
+    header("Location: ../manage_instructors.php?id=$id");
     exit();
 } else {
     echo "Error updating record: " . mysqli_error($conn);

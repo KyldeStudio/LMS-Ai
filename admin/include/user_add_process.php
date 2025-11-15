@@ -1,5 +1,5 @@
 <?php
-include '../include/db_connect.php';
+include '../../include/db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               VALUES ('$fullname', '$email', $age, '$username', '$password', NOW())";
 
     if (mysqli_query($conn, $query)) {
-        header("Location: manage_user.php?success=1");
-        exit;
+        header("Location: ../manage_user.php?success=1");
+        exit();
     } else {
         echo "Error: " . mysqli_error($conn);
     }

@@ -1,5 +1,5 @@
 <?php
-include '../include/db_connect.php';
+include '../../include/db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['id']);
@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (mysqli_query($conn, $query)) {
-        header("Location: manage_user.php?id=$id&updated=1");
-        exit;
+        header("Location: ../manage_user.php?id=$id&updated=1");
+        exit();
     } else {
         echo "Error updating record: " . mysqli_error($conn);
     }

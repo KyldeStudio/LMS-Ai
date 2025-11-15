@@ -1,5 +1,5 @@
 <?php
-include '../include/db_connect.php';
+include '../../include/db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $firstname = mysqli_real_escape_string($conn, $_POST['fullname']); // use 'fullname' from your form but store in 'firstname'
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               VALUES ('$firstname', '$email', '$office_hours', '$username', '$password', NOW())";
 
     if (mysqli_query($conn, $query)) {
-        header("Location: manage_instructors.php?success=1");
+        header("Location: ../manage_instructors.php?success=1");
         exit;
     } else {
         echo "Error: " . mysqli_error($conn);

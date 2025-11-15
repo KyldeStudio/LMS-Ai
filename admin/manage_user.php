@@ -91,7 +91,7 @@ if (isset($_GET['id'])) {
             <?php endif; ?>
 
             <div class="rounded-md border border-gray-300 overflow-hidden">
-                <Button class="py-2 px-6 text-black bg-white"><a href="">User</a></Button>
+                <Button class="py-2 px-6 text-black bg-white"><a href="#">User</a></Button>
                 <Button class="bg-transparent py-2 px-6"><a href="manage_instructors.php">Instructors</a></Button>
             </div>
         </div>
@@ -154,7 +154,7 @@ if (isset($_GET['id'])) {
                             <!-- delete button -->
                             <button 
                                 class="cursor-pointer"
-                                onclick="if(confirm('Are you sure you want to delete this user?')) window.location.href='delete_user.php?id=<?= $selectedUser['id'] ?>';">
+                                onclick="openDeleteModal(<?= $selectedUser['id'] ?>, '<?= htmlspecialchars($selectedUser['fullname'], ENT_QUOTES) ?>')">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" x="0" y="0" viewBox="0 0 173.397 173.397" style="enable-background:new 0 0 512 512" xml:space="preserve" fill-rule="evenodd" class=""><g><circle cx="86.699" cy="86.699" r="84.667" fill="#db4437" opacity="1" data-original="#db4437" class=""></circle><g fill="#fff"><path d="m122.819 67.955-6.586 66.354c-.376 3.783-3.256 6.818-7.059 6.818H64.223c-3.802 0-6.683-3.033-7.058-6.818l-6.587-66.354zM71.052 81.06a3.538 3.538 0 0 1 3.334-3.718 3.538 3.538 0 0 1 3.719 3.333l2.275 41.735a3.476 3.476 0 0 1-2.12 3.432c-1.381.599-2.912.291-3.954-.796a3.515 3.515 0 0 1-.978-2.247l-2.276-41.74zm27.96-3.718a3.549 3.549 0 0 1 3.333 3.718l-2.275 41.734a3.476 3.476 0 0 1-2.479 3.18 3.476 3.476 0 0 1-3.844-1.216 3.516 3.516 0 0 1-.73-2.344l2.276-41.739a3.538 3.538 0 0 1 3.718-3.333z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path><rect width="86.35" height="12.415" x="43.524" y="53.122" rx="6.207" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></rect><path d="M108.151 53.726h-6.18v-7.94c0-4.035-3.3-7.336-7.335-7.336H78.762c-4.035 0-7.336 3.3-7.336 7.336v7.94h-6.18v-7.94c0-7.446 6.07-13.516 13.515-13.516h15.875c7.445 0 13.515 6.07 13.515 13.515z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path></g></g></svg>
                             </button>
 
@@ -164,7 +164,7 @@ if (isset($_GET['id'])) {
 
                 <?php if ($isAddMode): ?>
                     <!-- ADD USER FORM -->
-                    <form action="user_add_process.php" method="POST" class="space-y-4">
+                    <form action="include/user_add_process.php" method="POST" class="space-y-4">
                         <div>
                             <label class="block text-sm font-semibold mb-1">Full Name</label>
                             <input type="text" name="fullname" class="w-full p-2 rounded bg-[#222] border border-gray-600" required>
@@ -192,7 +192,7 @@ if (isset($_GET['id'])) {
 
                 <?php elseif ($isEditMode && $selectedUser): ?>
                     <!-- EDIT USER FORM -->
-                    <form action="user_edit_process.php" method="POST" class="space-y-4">
+                    <form action="include/user_edit_process.php" method="POST" class="space-y-4">
                         <input type="hidden" name="id" value="<?= $selectedUser['id'] ?>">
                         <div>
                             <label class="block text-sm font-semibold mb-1">Full Name</label>
@@ -238,11 +238,49 @@ if (isset($_GET['id'])) {
         </div>
     </main>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-10 hidden flex items-center justify-center">
+
+    <!-- Semi-transparent overlay -->
+    <div class="absolute inset-0 bg-black opacity-90"></div>
+    
+    <!-- Modal box -->
+    <div class="relative bg-[#181818] text-white rounded-lg p-6 w-[400px] shadow-lg z-20">
+        <h3 class="text-lg font-bold mb-2">Confirm Delete</h3>
+        <p class="mb-4">
+            Are you sure you want to delete <br>
+            <span id="deleteUserName" class="font-semibold"></span>?
+        </p>
+        <div class="flex justify-end space-x-3">
+            <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700 cursor-pointer">
+                Cancel
+            </button>
+            <button onclick="performDelete()" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700 cursor-pointer">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+
     <script>
-    function confirmDelete(id) {
-        if (confirm("Are you sure you want to delete this user?")) {
-            window.location.href = "delete_user.php?id=" + id;
-        }
+    let deleteTargetId = null;
+    function openDeleteModal(id, name) {
+        deleteTargetId = id;
+        const nameEl = document.getElementById('deleteUserName');
+        if (nameEl) nameEl.textContent = name || id;
+        const modal = document.getElementById('deleteModal');
+        if (modal) modal.classList.remove('hidden');
+    }
+    function closeDeleteModal() {
+        deleteTargetId = null;
+        const modal = document.getElementById('deleteModal');
+        if (modal) modal.classList.add('hidden');
+    }
+    function performDelete() {
+        if (!deleteTargetId) return;
+        // The delete script is under admin/include, so use that relative path.
+        window.location.href = 'include/delete_user.php?id=' + encodeURIComponent(deleteTargetId);
     }
     </script>
 </body>
